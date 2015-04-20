@@ -1,0 +1,245 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".playBoard"
+    android:background="@drawable/background" >
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout">
+
+        <TableRow
+            android:id="@+id/tableRow1" >
+
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c05"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c15"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c25"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c35"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c45"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c55"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c65"
+                android:onClick="onButtonClicked" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2">
+
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c04"
+                android:onClick="onButtonClicked" />
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c14"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c24"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c34"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c44"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c54"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c64"
+                android:onClick="onButtonClicked"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3">
+
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c03"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c13"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c23"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c33"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c43"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c53"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c63"
+                android:onClick="onButtonClicked"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4">
+
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c02"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c12"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c22"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c32"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c42"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c52"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c62"
+                android:onClick="onButtonClicked"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5">
+
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c01"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c11"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c21"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c31"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c41"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c51"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c61"
+                android:onClick="onButtonClicked"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow6">
+
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c00"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c10"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c20"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c30"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c40"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c50"
+                android:onClick="onButtonClicked"/>
+            <ImageView  android:layout_weight="1"
+                android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c60"
+                android:onClick="onButtonClicked"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/playRow" >
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_0"
+                android:onClick="onButtonClicked"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_1"
+                android:onClick="onButtonClicked"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_2"
+                android:onClick="onButtonClicked"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_3"
+                android:onClick="onButtonClicked"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_4"
+                android:onClick="onButtonClicked"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_5"
+                android:onClick="onButtonClicked"
+                />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_weight="1"
+                android:text=""
+                android:id="@+id/bt_6"
+                android:onClick="onButtonClicked"
+                />
+        </TableRow>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Surrender"
+            android:id="@+id/surrender" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restart"
+            android:id="@+id/restart"
+            android:onClick="onButtonClicked" />
+    </TableLayout>
+
+</RelativeLayout>
