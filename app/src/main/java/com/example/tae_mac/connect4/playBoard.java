@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +34,7 @@ public class playBoard extends ActionBarActivity {
     public void onButtonClicked(View V) {
         if (winState=="playing") {
             switch (V.getId()) {
-                case R.id.bt_0:
+                //case R.id.bt_0:
                 case R.id.c00:
                 case R.id.c01:
                 case R.id.c02:
@@ -41,11 +42,11 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c04:
                 case R.id.c05:
                     if (count[0] <= 5) {
-                        function_1(board[0][count[0]]);
-                        count[0]++;
+                            function_1(board[0][count[0]]);
+                            count[0]++;
                     }
                     break;
-                case R.id.bt_1:
+                //case R.id.bt_1:
                 case R.id.c10:
                 case R.id.c11:
                 case R.id.c12:
@@ -57,7 +58,7 @@ public class playBoard extends ActionBarActivity {
                         count[1]++;
                     }
                     break;
-                case R.id.bt_2:
+                //case R.id.bt_2:
                 case R.id.c20:
                 case R.id.c21:
                 case R.id.c22:
@@ -66,10 +67,11 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c25:
                     if (count[2] <= 5) {
                         function_1(board[2][count[2]]);
+
                         count[2]++;
                     }
                     break;
-                case R.id.bt_3:
+                //case R.id.bt_3:
                 case R.id.c30:
                 case R.id.c31:
                 case R.id.c32:
@@ -81,7 +83,7 @@ public class playBoard extends ActionBarActivity {
                         count[3]++;
                     }
                     break;
-                case R.id.bt_4:
+                //case R.id.bt_4:
                 case R.id.c40:
                 case R.id.c41:
                 case R.id.c42:
@@ -93,7 +95,7 @@ public class playBoard extends ActionBarActivity {
                         count[4]++;
                     }
                     break;
-                case R.id.bt_5:
+                //case R.id.bt_5:
                 case R.id.c50:
                 case R.id.c51:
                 case R.id.c52:
@@ -105,7 +107,7 @@ public class playBoard extends ActionBarActivity {
                         count[5]++;
                     }
                     break;
-                case R.id.bt_6:
+                //case R.id.bt_6:
                 case R.id.c60:
                 case R.id.c61:
                 case R.id.c62:
@@ -119,7 +121,7 @@ public class playBoard extends ActionBarActivity {
                     break;
                 case R.id.surrender:
                     break;
-                case R.id.restart:
+                case R.id.exit:
                     if(winState=="red_win") {
                         Intent res = new Intent();
                         res.putExtra("retValue", "RED WIN");
@@ -147,14 +149,25 @@ public class playBoard extends ActionBarActivity {
     public void function_1(int cxx){
         if(turn==0) {
             ImageView cell = (ImageView)findViewById(cxx);//where cxx = {c11,c12,...,c16}
-            cell.setImageResource(R.drawable.red2);
+            cell.setImageResource(R.drawable.red1);
             turn=1;
+            function_2(cxx);
         }
         else if(turn==1) {
             ImageView cell = (ImageView)findViewById(cxx);
-            cell.setImageResource(R.drawable.yellow2);
+            cell.setImageResource(R.drawable.yellow1);
             turn=0;
+            function_2(cxx);
         }
+    }
+
+    public void function_2(int cxx){
+        Button update = (Button)findViewById(R.id.exit);
+        ImageView cellRC = (ImageView)findViewById(cxx);
+        String label1 = cellRC.getResources().getResourceName(cellRC.getId());
+        String row =  label1.substring(label1.length()-1,label1.length());
+        String col = label1.substring(label1.length()-2,label1.length()-1);
+        update.setText("EXIT turn=" + turn + "row= " + row + "col= " + col);
     }
 
     @Override

@@ -7,16 +7,19 @@
     android:background="@drawable/background" >
 
     <TableLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:weightSum="6"
         android:id="@+id/tableLayout">
 
         <TableRow
-            android:id="@+id/tableRow1" >
+            android:id="@+id/tableRow1"
+            android:layout_weight="1">
 
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c05"
-                android:onClick="onButtonClicked" />
+                android:onClick="onButtonClicked"
+                android:layout_height="match_parent"/>
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c15"
                 android:onClick="onButtonClicked" />
@@ -38,11 +41,12 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow2">
+            android:id="@+id/tableRow2"
+            android:layout_weight="1">
 
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c04"
-                android:onClick="onButtonClicked" />
+                android:onClick="onButtonClicked"/>
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c14"
                 android:onClick="onButtonClicked"/>
@@ -64,7 +68,8 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow3">
+            android:id="@+id/tableRow3"
+            android:layout_weight="1">
 
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c03"
@@ -90,7 +95,8 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow4">
+            android:id="@+id/tableRow4"
+            android:layout_weight="1">
 
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c02"
@@ -116,7 +122,8 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow5">
+            android:id="@+id/tableRow5"
+            android:layout_weight="1">
 
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c01"
@@ -142,7 +149,8 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow6">
+            android:id="@+id/tableRow6"
+            android:layout_weight="1">
 
             <ImageView  android:layout_weight="1"
                 android:scaleType="centerCrop" android:src="@drawable/cell" android:id="@+id/c00"
@@ -167,79 +175,33 @@
                 android:onClick="onButtonClicked"/>
         </TableRow>
 
-        <TableRow
-            android:id="@+id/playRow" >
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_0"
-                android:onClick="onButtonClicked"
-                />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_1"
-                android:onClick="onButtonClicked"
-                />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_2"
-                android:onClick="onButtonClicked"
-                />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_3"
-                android:onClick="onButtonClicked"
-                />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_4"
-                android:onClick="onButtonClicked"
-                />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_5"
-                android:onClick="onButtonClicked"
-                />
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_weight="1"
-                android:text=""
-                android:id="@+id/bt_6"
-                android:onClick="onButtonClicked"
-                />
-        </TableRow>
 
         <Button
             style="?android:attr/buttonStyleSmall"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Surrender"
-            android:id="@+id/surrender" />
+            android:id="@+id/surrender"
+            android:visibility="invisible" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="EXIT"
+            android:id="@+id/exit"
+            android:onClick="onButtonClicked" />
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Restart"
-            android:id="@+id/restart"
-            android:onClick="onButtonClicked" />
+            android:text="Surrender"
+            android:id="@+id/surrender"
+            android:visibility="invisible" />
     </TableLayout>
 
 </RelativeLayout>
