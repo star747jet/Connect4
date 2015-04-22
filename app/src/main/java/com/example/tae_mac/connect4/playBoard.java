@@ -2,21 +2,54 @@ package com.example.tae_mac.connect4;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public class playBoard extends ActionBarActivity {
-    public int turn=0, i, j;
+public class playBoard extends ActionBarActivity implements Runnable {
+    public int turn, i, j, roomid =0,won;
+    public int last_turn=1,status,last_placeid=0,placecol;
     public String winState="playing";
+    public boolean waitingForPlace=false;
     public int count[] = {0,0,0,0,0,0,0};
     public int board[][] = new int[7][6];
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +62,30 @@ public class playBoard extends ActionBarActivity {
                 board[i][j] = textViewID;
             }
         }
+
+        GetRoomTask task = new GetRoomTask();
+        task.execute();
+
+        handler = new Handler();
+        handler.postDelayed(this, 5000);
+    }
+
+    public void run() {
+        if(status==0) {
+            GetRoomTask task = new GetRoomTask();
+            task.execute();
+            handler.postDelayed(this, 5000);
+        } else {
+            if(last_turn==turn && winState=="playing" && !waitingForPlace){
+                GetGameTask task = new GetGameTask();
+                task.execute();
+                handler.postDelayed(this, 3000);
+            }
+        }
     }
 
     public void onButtonClicked(View V) {
-        if (winState=="playing") {
+
             switch (V.getId()) {
                 //case R.id.bt_0:
                 case R.id.c00:
@@ -41,10 +94,7 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c03:
                 case R.id.c04:
                 case R.id.c05:
-                    if (count[0] <= 5) {
-                            function_1(board[0][count[0]]);
-                            count[0]++;
-                    }
+                    place_chip(0);
                     break;
                 //case R.id.bt_1:
                 case R.id.c10:
@@ -53,10 +103,7 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c13:
                 case R.id.c14:
                 case R.id.c15:
-                    if (count[1] <= 5) {
-                        function_1(board[1][count[1]]);
-                        count[1]++;
-                    }
+                    place_chip(1);
                     break;
                 //case R.id.bt_2:
                 case R.id.c20:
@@ -65,11 +112,7 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c23:
                 case R.id.c24:
                 case R.id.c25:
-                    if (count[2] <= 5) {
-                        function_1(board[2][count[2]]);
-
-                        count[2]++;
-                    }
+                    place_chip(2);
                     break;
                 //case R.id.bt_3:
                 case R.id.c30:
@@ -78,10 +121,7 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c33:
                 case R.id.c34:
                 case R.id.c35:
-                    if (count[3] <= 5) {
-                        function_1(board[3][count[3]]);
-                        count[3]++;
-                    }
+                    place_chip(3);
                     break;
                 //case R.id.bt_4:
                 case R.id.c40:
@@ -90,10 +130,7 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c43:
                 case R.id.c44:
                 case R.id.c45:
-                    if (count[4] <= 5) {
-                        function_1(board[4][count[4]]);
-                        count[4]++;
-                    }
+                    place_chip(4);
                     break;
                 //case R.id.bt_5:
                 case R.id.c50:
@@ -102,10 +139,7 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c53:
                 case R.id.c54:
                 case R.id.c55:
-                    if (count[5] <= 5) {
-                        function_1(board[5][count[5]]);
-                        count[5]++;
-                    }
+                    place_chip(5);
                     break;
                 //case R.id.bt_6:
                 case R.id.c60:
@@ -114,23 +148,21 @@ public class playBoard extends ActionBarActivity {
                 case R.id.c63:
                 case R.id.c64:
                 case R.id.c65:
-                    if (count[6] <= 5) {
-                        function_1(board[6][count[6]]);
-                        count[6]++;
-                    }
+                    place_chip(6);
                     break;
                 case R.id.surrender:
                     break;
                 case R.id.exit:
-                    if(winState=="red_win") {
+
+                    if(winState=="WON") {
                         Intent res = new Intent();
-                        res.putExtra("retValue", "RED WIN");
+                        res.putExtra("retValue", "You won!");
                         setResult(RESULT_OK, res);
                         finish();
                     }
-                    else if(winState=="yellow_win") {
+                    else if(winState=="LOST") {
                         Intent res = new Intent();
-                        res.putExtra("retValue", "YELLOW WIN");
+                        res.putExtra("retValue", "You lost!");
                         setResult(RESULT_OK, res);
                         finish();
                     }
@@ -142,21 +174,39 @@ public class playBoard extends ActionBarActivity {
                     }
                     break;
             }
-        }
+
     }
 
+    public void place_chip(int col){
+        int cxx;
+        if (count[col] <= 5 && status==1&& last_turn!=turn) {
+            cxx = board[col][count[col]];
+            function_1(cxx,turn);
+            checkWin(col, count[col]);
+            count[col]++;
 
-    public void function_1(int cxx){
-        if(turn==0) {
+            last_turn = turn;
+            PostChipTask p = new PostChipTask();
+            p.execute(new String[]{col+""});
+        }
+    }
+    public void place_chip2(int col){
+        int cxx = board[col][count[col]];
+            function_1(cxx,last_turn);
+            count[col]++;
+    }
+
+    public void function_1(int cxx,int placeturn){
+        if(placeturn==0) {
             ImageView cell = (ImageView)findViewById(cxx);//where cxx = {c11,c12,...,c16}
             cell.setImageResource(R.drawable.red1);
-            turn=1;
+            cell.setTag(placeturn);
             function_2(cxx);
         }
-        else if(turn==1) {
+        else if(placeturn==1) {
             ImageView cell = (ImageView)findViewById(cxx);
             cell.setImageResource(R.drawable.yellow1);
-            turn=0;
+            cell.setTag(placeturn);
             function_2(cxx);
         }
     }
@@ -167,7 +217,7 @@ public class playBoard extends ActionBarActivity {
         String label1 = cellRC.getResources().getResourceName(cellRC.getId());
         String row =  label1.substring(label1.length()-1,label1.length());
         String col = label1.substring(label1.length()-2,label1.length()-1);
-        update.setText("EXIT turn=" + turn + "row= " + row + "col= " + col);
+        //update.setText("EXIT turn=" + turn + "row= " + row + "col= " + col);
     }
 
     @Override
@@ -190,5 +240,229 @@ public class playBoard extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class GetRoomTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            BufferedReader reader;
+            StringBuilder buffer = new StringBuilder();
+            String line;
+
+            try {
+                Log.e("GetRoomTask", "");
+                URL u;
+                if(roomid==0) {
+                    u = new URL("http://ict.siit.tu.ac.th/~u5522781004/connect4/get_room.php");
+                } else {
+                    u = new URL("http://ict.siit.tu.ac.th/~u5522781004/connect4/get_room.php?roomid=" + roomid);
+                }
+                HttpURLConnection h = (HttpURLConnection)u.openConnection();
+                h.setRequestMethod("GET");
+                h.setDoInput(true);
+                h.connect();
+
+                int response = h.getResponseCode();
+                if (response == 200) {
+                    reader = new BufferedReader(new InputStreamReader(h.getInputStream()));
+                    while((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    Log.e("GetRoomTask", buffer.toString());
+                    //Parsing JSON and displaying messages
+
+                    //To append a new message:
+
+
+                    JSONObject json = new JSONObject(buffer.toString());
+                    if(roomid==0) {
+                        roomid = json.getInt("roomid");
+                        turn = json.getInt("turn");
+                    } else {
+                        int roomStatus = json.getInt("status");
+                        if(roomStatus==1){
+                            status=1;
+                        }
+
+                    }
+
+                }
+            } catch (MalformedURLException e) {
+                Log.e("GetRoomTask", "Invalid URL");
+            } catch (IOException e) {
+                Log.e("GetRoomTask", "I/O Exception");
+            } catch (JSONException e) {
+                Log.e("GetRoomTask", "Invalid JSON");
+            }
+            return true;
+        }
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if(status==1){
+                getConnected();
+            }
+            /*
+            if (result) {
+                adapter.notifyDataSetChanged();
+                lastUpdate = System.currentTimeMillis();
+                Toast t = Toast.makeText(MessageActivity.this.getApplicationContext(),
+                        "Updated the timeline",
+                        Toast.LENGTH_SHORT);
+                t.show();
+            }
+            */
+        }
+    }
+
+    public void getConnected(){
+        TextView sta = (TextView)findViewById(R.id.status);
+            sta.setText("Connected");
+    }
+
+    class PostChipTask extends AsyncTask<String, Void, Boolean> {
+        String line;
+        StringBuilder buffer = new StringBuilder();
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+
+            HttpClient h = new DefaultHttpClient();
+            HttpPost p = new HttpPost("http://ict.siit.tu.ac.th/~u5522781004/connect4/post_game.php");
+            String col = params[0];
+            List<NameValuePair> values = new ArrayList<NameValuePair>();
+            values.add(new BasicNameValuePair("roomid", roomid+""));
+            values.add(new BasicNameValuePair("turn", turn+""));
+            values.add(new BasicNameValuePair("col",col));
+            try {
+                p.setEntity(new UrlEncodedFormEntity(values));
+                HttpResponse response = h.execute(p);
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(response.getEntity().getContent()));
+                while((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+
+
+                return true;
+            } catch (UnsupportedEncodingException e) {
+                Log.e("Error", "Invalid encoding");
+            } catch (ClientProtocolException e) {
+                Log.e("Error", "Error in posting a message");
+            } catch (IOException e) {
+                Log.e("Error", "I/O Exception");
+            }
+
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if(result){
+                run();
+            }
+        }
+    }
+    class GetGameTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            BufferedReader reader;
+            StringBuilder buffer = new StringBuilder();
+            String line;
+
+            try {
+                URL u = new URL("http://ict.siit.tu.ac.th/~u5522781004/connect4/get_game.php?last_placeid=" + last_placeid +
+                                "&turn=" + turn + "&roomid=" + roomid);
+                HttpURLConnection h = (HttpURLConnection)u.openConnection();
+                h.setRequestMethod("GET");
+                h.setDoInput(true);
+                h.connect();
+                waitingForPlace = true;
+
+                int response = h.getResponseCode();
+                if (response == 200) {
+                    waitingForPlace = false;
+                    reader = new BufferedReader(new InputStreamReader(h.getInputStream()));
+                    while((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    Log.e("LoadMessageTask", buffer.toString());
+                    //Parsing JSON and displaying messages
+
+                    //To append a new message:
+
+
+                    JSONObject json = new JSONObject(buffer.toString());
+
+
+
+                    if(json.getInt("new")==1 || json.getInt("new")==2) {
+
+                        if(last_placeid>=json.getInt("last_placeid")) {
+                            return false;
+                        }
+
+                        if(json.getInt("new")==2){
+                            loseGame();
+                        }
+
+                            last_placeid = json.getInt("last_placeid");
+                            last_turn = json.getInt("last_turn");
+                            placecol = json.getInt("col");
+                    }
+                }
+            } catch (MalformedURLException e) {
+                Log.e("LoadMessageTask", "Invalid URL");
+            } catch (IOException e) {
+                Log.e("LoadMessageTask", "I/O Exception");
+            } catch (JSONException e) {
+                Log.e("LoadMessageTask", "Invalid JSON");
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if(last_turn!=turn && placecol>=0){
+                place_chip2(placecol);
+            }
+        }
+    }
+
+    void checkWin(int col, int row){
+        Log.e("Checkdown",checkDown(col,row) +"");
+        if(checkDown(col,row)==4){
+            PostChipTask p = new PostChipTask();
+            p.execute(new String[]{9+""});
+            winGame();
+        }
+    }
+
+    int checkDown(int col, int row){
+        if(col<0 || row<0){
+            return 0;
+        }
+        int cxx = board[col][row];
+        ImageView cell = (ImageView)findViewById(cxx);
+        if(cell.getTag()==turn){
+            return 1 + checkDown(col,row-1);
+        } else {
+            return 0;
+        }
+    }
+
+    void winGame(){
+
+        winState = "WON";
+    }
+
+    void loseGame(){
+
+        winState = "LOST";
     }
 }
