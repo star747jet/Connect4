@@ -176,15 +176,13 @@
         </TableRow>
 
 
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Surrender"
-            android:id="@+id/surrender"
-            android:visibility="invisible" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:gravity="center"
+            android:layout_height="55dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/TurnView"
+            android:textAlignment="center" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
