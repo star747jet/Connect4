@@ -1,5 +1,7 @@
 package com.example.tae_mac.connect4;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -150,10 +152,18 @@ public class playBoard extends ActionBarActivity implements Runnable {
                     place_chip(6);
                     break;
                 case R.id.exit:
-                        //Intent res = new Intent();
-                        //res.putExtra("retValue", "QUIT");
-                        //setResult(RESULT_OK, res);
-                        finish();
+                    AlertDialog.Builder b = new AlertDialog.Builder(playBoard.this);
+                    CharSequence s = "Are you sure ?";
+                    b.setTitle("Quit");
+                    b.setMessage(s);
+                    b.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    b.setPositiveButton("Cancle", null);
+                    b.show();
                     break;
             }
 

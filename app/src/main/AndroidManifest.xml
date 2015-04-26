@@ -27,5 +27,4 @@
             android:label="@string/title_activity_how_to" >
         </activity>
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
