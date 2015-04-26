@@ -43,11 +43,11 @@ import java.util.Map;
 
 
 public class playBoard extends ActionBarActivity implements Runnable {
-    public int turn, i, j, roomid =0;
-    public int last_turn=1,status,last_placeid=0,placecol;
-    public String winState="playing";
-    public int count[] = {0,0,0,0,0,0,0};
-    public int board[][] = new int[7][6];
+    int turn, i, j, roomid =0;
+    int last_turn=1,status,last_placeid=0,placecol;
+    String winState="playing";
+    int count[] = {0,0,0,0,0,0,0};
+    int board[][] = new int[7][6];
     Handler handler;
 
     @Override
@@ -150,9 +150,9 @@ public class playBoard extends ActionBarActivity implements Runnable {
                     place_chip(6);
                     break;
                 case R.id.exit:
-                        Intent res = new Intent();
-                        res.putExtra("retValue", "QUIT");
-                        setResult(RESULT_OK, res);
+                        //Intent res = new Intent();
+                        //res.putExtra("retValue", "QUIT");
+                        //setResult(RESULT_OK, res);
                         finish();
                     break;
             }
@@ -169,6 +169,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
 
             last_turn = turn;
             ((TextView)findViewById(R.id.TurnView)).setText("Opponent's turn.");
+            turnImg();
             PostChipTask p = new PostChipTask();
             p.execute(new String[]{col+""});
         }
@@ -178,31 +179,49 @@ public class playBoard extends ActionBarActivity implements Runnable {
             function_1(cxx,last_turn);
             count[col]++;
         ((TextView)findViewById(R.id.TurnView)).setText("Your turn.");
-
+        turnImg();
     }
 
     public void function_1(int cxx,int placeturn){
         if(placeturn==0) {
             ImageView cell = (ImageView)findViewById(cxx);//where cxx = {c11,c12,...,c16}
-            cell.setImageResource(R.drawable.red1);
+            cell.setImageResource(R.drawable.redchip);
             cell.setTag(placeturn);
             function_2(cxx);
         }
         else if(placeturn==1) {
             ImageView cell = (ImageView)findViewById(cxx);
-            cell.setImageResource(R.drawable.yellow1);
+            cell.setImageResource(R.drawable.yellowchip);
             cell.setTag(placeturn);
             function_2(cxx);
         }
     }
 
     public void function_2(int cxx){
-        Button update = (Button)findViewById(R.id.exit);
+        TextView update = (TextView)findViewById(R.id.exit);
         ImageView cellRC = (ImageView)findViewById(cxx);
         String label1 = cellRC.getResources().getResourceName(cellRC.getId());
         String row =  label1.substring(label1.length()-1,label1.length());
         String col = label1.substring(label1.length()-2,label1.length()-1);
         //update.setText("EXIT turn=" + turn + "row= " + row + "col= " + col);
+    }
+
+    public void turnImg(){
+        if(turn==0){
+            if(last_turn != turn){
+                ((ImageView)findViewById(R.id.TurnImg)).setImageResource(R.drawable.redchip0);
+            }
+            else{
+                ((ImageView)findViewById(R.id.TurnImg)).setImageResource(R.drawable.redchip1);
+            }
+        }
+        else {
+            if (last_turn != turn) {
+                ((ImageView) findViewById(R.id.TurnImg)).setImageResource(R.drawable.yellowchip0);
+            } else {
+                ((ImageView) findViewById(R.id.TurnImg)).setImageResource(R.drawable.yellowchip1);
+            }
+        }
     }
 
     @Override
@@ -308,9 +327,11 @@ public class playBoard extends ActionBarActivity implements Runnable {
         if(turn==0){
             a = "You play RED";
             ((TextView)findViewById(R.id.TurnView)).setText("Your turn.");
+            turnImg();
         } else {
             a = "You play YELLOW";
             ((TextView)findViewById(R.id.TurnView)).setText("Opponent's turn.");
+            turnImg();
         }
             sta.setText("Connected | " + a);
     }
@@ -435,7 +456,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
     }
 
     int checkDown(int col, int row){
-        if(col<0 || row<0){
+        if(row<0){
             return 0;
         }
         int cxx = board[col][row];
@@ -448,7 +469,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
     }
 
     int checkLeft(int col,int row){
-        if(col<0 || row<0){
+        if(col<0){
             return 0;
         }
         int cxx = board[col][row];
@@ -461,26 +482,26 @@ public class playBoard extends ActionBarActivity implements Runnable {
     }
 
     int checkRight(int col,int row){
-        if(col<0 || row<0){
+        if(col>6){
             return 0;
         }
         int cxx = board[col][row];
         ImageView cell = (ImageView)findViewById(cxx);
         if(cell.getTag()==turn){
-            return 1 + checkLeft(col+1,row);
+            return 1 + checkRight(col+1,row);
         } else {
             return 0;
         }
     }
 
     int checkUpLeft(int col,int row){
-        if(col<0 || row<0){
+        if(col<0 || row>5){
             return 0;
         }
         int cxx = board[col][row];
         ImageView cell = (ImageView)findViewById(cxx);
         if(cell.getTag()==turn){
-            return 1 + checkLeft(col-1,row+1);
+            return 1 + checkUpLeft(col-1,row+1);
         } else {
             return 0;
         }
@@ -493,31 +514,31 @@ public class playBoard extends ActionBarActivity implements Runnable {
         int cxx = board[col][row];
         ImageView cell = (ImageView)findViewById(cxx);
         if(cell.getTag()==turn){
-            return 1 + checkLeft(col-1,row-1);
+            return 1 + checkDownLeft(col-1,row-1);
         } else {
             return 0;
         }
     }
     int checkUpRight(int col,int row){
-        if(col<0 || row<0){
+        if(col>6 || row>5){
             return 0;
         }
         int cxx = board[col][row];
         ImageView cell = (ImageView)findViewById(cxx);
         if(cell.getTag()==turn){
-            return 1 + checkLeft(col+1,row+1);
+            return 1 + checkUpRight(col+1,row+1);
         } else {
             return 0;
         }
     }
     int checkDownRight(int col,int row){
-        if(col<0 || row<0){
+        if(col>6 || row<0){
             return 0;
         }
         int cxx = board[col][row];
         ImageView cell = (ImageView)findViewById(cxx);
         if(cell.getTag()==turn){
-            return 1 + checkLeft(col+1,row-1);
+            return 1 + checkDownRight(col+1,row-1);
         } else {
             return 0;
         }
@@ -526,7 +547,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
     void winGame(){
         winState = "WON";
         Intent res = new Intent();
-        res.putExtra("retValue", "WON");
+        res.putExtra("retValue", "YOU WIN");
         setResult(RESULT_OK, res);
         finish();
     }
@@ -534,7 +555,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
     void loseGame(){
         winState = "LOST";
         Intent res = new Intent();
-        res.putExtra("retValue", "LOST");
+        res.putExtra("retValue", "YOU LOST");
         setResult(RESULT_OK, res);
         finish();
     }

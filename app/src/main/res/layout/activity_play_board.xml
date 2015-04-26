@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".playBoard"
-    android:background="@drawable/background" >
+    android:background="@drawable/background_2_2">
 
     <TableLayout
         android:layout_width="fill_parent"
@@ -182,16 +182,25 @@
             android:layout_height="55dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/TurnView"
-            android:textAlignment="center" />
+            android:textColor="#ffffff"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="EXIT"
-            android:id="@+id/exit"
-            android:onClick="onButtonClicked" />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="EXIT"
+                android:id="@+id/exit"
+                android:textSize="40dp"
+                android:textColor="#ffffff"
+                android:onClick="onButtonClicked"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"/>
+
+        </TableRow>
 
         <TextView
             android:layout_width="wrap_content"
@@ -199,6 +208,12 @@
             android:id="@+id/status"
             android:text="Waiting"
             android:textAlignment="center" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/TurnImg"/>
 
     </TableLayout>
 
