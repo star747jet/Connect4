@@ -46,11 +46,24 @@ import java.util.Map;
 
 public class playBoard extends ActionBarActivity implements Runnable {
     int turn, i, j, roomid =0;
-    int last_turn=1,status,last_placeid=0,placecol;
+    int last_turn=1,status,last_placeid=0,placecol,placerow;
     String winState="playing";
     int count[] = {0,0,0,0,0,0,0};
     int board[][] = new int[7][6];
     Handler handler;
+    boolean active;
+    boolean fetching;
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        active = true;
+    }
+
+    public void onStop(){
+        super.onStop();
+        active= false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +85,15 @@ public class playBoard extends ActionBarActivity implements Runnable {
     }
 
     public void run() {
+        if(!active){
+            return;
+        }
         if(status==0) {
             GetRoomTask task = new GetRoomTask();
             task.execute();
             handler.postDelayed(this, 5000);
         } else {
-            if(last_turn==turn && winState=="playing"){
+            if(last_turn==turn && winState=="playing" && !fetching){
                 GetGameTask task = new GetGameTask();
                 task.execute();
                 handler.postDelayed(this, 3000);
@@ -95,7 +111,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c03:
                 case R.id.c04:
                 case R.id.c05:
-                    place_chip(0);
+                    place_chip(0,count[0]);
                     break;
                 //case R.id.bt_1:
                 case R.id.c10:
@@ -104,7 +120,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c13:
                 case R.id.c14:
                 case R.id.c15:
-                    place_chip(1);
+                    place_chip(1,count[1]);
                     break;
                 //case R.id.bt_2:
                 case R.id.c20:
@@ -113,7 +129,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c23:
                 case R.id.c24:
                 case R.id.c25:
-                    place_chip(2);
+                    place_chip(2,count[2]);
                     break;
                 //case R.id.bt_3:
                 case R.id.c30:
@@ -122,7 +138,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c33:
                 case R.id.c34:
                 case R.id.c35:
-                    place_chip(3);
+                    place_chip(3,count[3]);
                     break;
                 //case R.id.bt_4:
                 case R.id.c40:
@@ -131,7 +147,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c43:
                 case R.id.c44:
                 case R.id.c45:
-                    place_chip(4);
+                    place_chip(4,count[4]);
                     break;
                 //case R.id.bt_5:
                 case R.id.c50:
@@ -140,7 +156,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c53:
                 case R.id.c54:
                 case R.id.c55:
-                    place_chip(5);
+                    place_chip(5,count[5]);
                     break;
                 //case R.id.bt_6:
                 case R.id.c60:
@@ -149,7 +165,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                 case R.id.c63:
                 case R.id.c64:
                 case R.id.c65:
-                    place_chip(6);
+                    place_chip(6,count[6]);
                     break;
                 case R.id.exit:
                     AlertDialog.Builder b = new AlertDialog.Builder(playBoard.this);
@@ -162,32 +178,32 @@ public class playBoard extends ActionBarActivity implements Runnable {
                             finish();
                         }
                     });
-                    b.setPositiveButton("Cancle", null);
+                    b.setPositiveButton("Cancel", null);
                     b.show();
                     break;
             }
 
     }
 
-    public void place_chip(int col){
+    public void place_chip(int col,int row){
         int cxx;
         if (count[col] <= 5 && status==1&& last_turn!=turn) {
-            cxx = board[col][count[col]];
+            cxx = board[col][row];
+            count[col] = row+1;
             function_1(cxx,turn);
-            checkWin(col, count[col]);
-            count[col]++;
+            checkWin(col,row);
 
             last_turn = turn;
             ((TextView)findViewById(R.id.TurnView)).setText("Opponent's turn.");
             turnImg();
             PostChipTask p = new PostChipTask();
-            p.execute(new String[]{col+""});
+            p.execute(new String[]{col+"",row+""});
         }
     }
-    public void place_chip2(int col){
-        int cxx = board[col][count[col]];
+    public void place_chip2(int col,int row){
+        int cxx = board[col][row];
+        count[col] = row+1;
             function_1(cxx,last_turn);
-            count[col]++;
         ((TextView)findViewById(R.id.TurnView)).setText("Your turn.");
         turnImg();
     }
@@ -353,6 +369,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
         @Override
         protected Boolean doInBackground(String... params) {
 
+
             HttpClient h = new DefaultHttpClient();
             HttpPost p = new HttpPost("http://ict.siit.tu.ac.th/~u5522781004/connect4/post_game.php");
             String col = params[0];
@@ -360,6 +377,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
             values.add(new BasicNameValuePair("roomid", roomid+""));
             values.add(new BasicNameValuePair("turn", turn+""));
             values.add(new BasicNameValuePair("col",col));
+            values.add(new BasicNameValuePair("row",params[1]));
             try {
                 p.setEntity(new UrlEncodedFormEntity(values));
                 HttpResponse response = h.execute(p);
@@ -437,6 +455,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
                             last_placeid = json.getInt("last_placeid");
                             last_turn = json.getInt("last_turn");
                             placecol = json.getInt("col");
+                            placerow = json.getInt("row");
                     }
                 }
             } catch (MalformedURLException e) {
@@ -452,7 +471,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
         @Override
         protected void onPostExecute(Boolean result) {
             if(last_turn!=turn && placecol>=0){
-                place_chip2(placecol);
+                place_chip2(placecol,placerow);
             }
         }
     }
@@ -460,7 +479,7 @@ public class playBoard extends ActionBarActivity implements Runnable {
     void checkWin(int col, int row){
         if(checkDown(col,row)==4 || (checkLeft(col,row)+checkRight(col,row)-1)==4 || (checkUpLeft(col,row)+checkDownRight(col,row)-1)==4 || (checkDownLeft(col,row)+checkUpRight(col,row)-1)==4){
             PostChipTask p = new PostChipTask();
-            p.execute(new String[]{9+""});
+            p.execute(new String[]{9+"",0+""});
             winGame();
         }
     }
